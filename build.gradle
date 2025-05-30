@@ -28,6 +28,8 @@ dependencies {
 	implementation 'com.example:UberProject-EntityService:0.0.2-SNAPSHOT'
 	// https://mvnrepository.com/artifact/org.springframework.cloud/spring-cloud-starter-netflix-eureka-client
 	implementation("org.springframework.cloud:spring-cloud-starter-netflix-eureka-client:4.2.1")
+	// https://mvnrepository.com/artifact/org.springframework.kafka/spring-kafka
+	implementation("org.springframework.kafka:spring-kafka:3.3.1")
 
 }
 

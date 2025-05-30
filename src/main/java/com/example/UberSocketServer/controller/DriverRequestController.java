@@ -1,9 +1,11 @@
 package com.example.UberSocketServer.controller;
 
+import com.example.UberSocketServer.consumers.KafkaConsumerService;
 import com.example.UberSocketServer.dtos.RideRequestDto;
 import com.example.UberSocketServer.dtos.RideResponseDto;
 import com.example.UberSocketServer.dtos.UpdateBookingRequestDto;
 import com.example.UberSocketServer.dtos.UpdateBookingResponseDto;
+import com.example.UberSocketServer.producers.KafkaProducerService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
@@ -25,9 +27,12 @@ public class DriverRequestController {
 
     private final RestTemplate restTemplate;
 
-    public DriverRequestController(SimpMessagingTemplate simpMessagingTemplate, RestTemplate restTemplate){
+    private final KafkaProducerService kafkaProducerService;
+
+    public DriverRequestController(SimpMessagingTemplate simpMessagingTemplate, RestTemplate restTemplate,KafkaProducerService kafkaProducerService){
         this.simpMessagingTemplate = simpMessagingTemplate;
         this.restTemplate = restTemplate;
+        this.kafkaProducerService = kafkaProducerService;
     }
 
     @PostMapping ("/newride")
@@ -51,5 +56,10 @@ public class DriverRequestController {
                 .build();
         UpdateBookingResponseDto response = this.restTemplate.postForObject("http://localhost:7778/api/v1/booking"+rideResponseDto.getBookingId(),dto,UpdateBookingResponseDto.class);
         System.out.println(response.getBookingStatus());
+    }
+
+    public boolean help(){
+        kafkaProducerService.publishMessage("sample-topic", "hello");
+        return true;
     }
 }
